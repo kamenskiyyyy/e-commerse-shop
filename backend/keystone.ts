@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import { config, createSchema } from '@keystone-next/keystone/schema';
 import { statelessSessions } from '@keystone-next/keystone/session';
+import { User } from './schemas/User';
 
 const databaseURL = process.env.DATABASE_URL || 'mongodb://localhost:27017/sick-fits-keystone';
 
@@ -21,10 +22,10 @@ export default config({
     url: databaseURL,
   },
   lists: createSchema({
-
+    User,
   }),
   ui: {
-    isAccessAllowed: () => true
+    isAccessAllowed: () => true,
   },
   session: statelessSessions(sessionConfig),
 });
