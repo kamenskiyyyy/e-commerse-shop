@@ -3,6 +3,7 @@ import { config, createSchema } from '@keystone-next/keystone/schema';
 import { statelessSessions, withItemData } from '@keystone-next/keystone/session';
 import { User } from './schemas/User';
 import { createAuth } from '@keystone-next/auth';
+import { Product } from './schemas/Product';
 
 const databaseURL = process.env.DATABASE_URL || 'mongodb://localhost:27017/sick-fits-keystone';
 
@@ -31,6 +32,7 @@ export default withAuth(config({
   },
   lists: createSchema({
     User,
+    Product,
   }),
   ui: {
     isAccessAllowed: ({ session }) => session?.data,
