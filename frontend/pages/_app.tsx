@@ -1,9 +1,13 @@
 import { Page } from '@components/Page';
 import { AppProps } from 'next/app';
 import NextNProgress from 'nextjs-progressbar';
+import { ApolloProvider } from '@apollo/client';
+import { useApollo } from '@lib/withData';
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  return <>
+  const apolloClient = useApollo(pageProps);
+
+  return <ApolloProvider client={apolloClient}>
     <NextNProgress color='red'
                    startPosition={0.3}
                    stopDelayMs={200}
@@ -12,5 +16,5 @@ export default function MyApp({ Component, pageProps }: AppProps) {
     <Page>
       <Component {...pageProps} />
     </Page>
-  </>;
+  </ApolloProvider>;
 }

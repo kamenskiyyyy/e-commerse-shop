@@ -41,6 +41,8 @@
     "@testing-library/jest-dom": "^5.16.2",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
+    "@types/apollo-upload-client": "^17.0.0",
+    "@types/lodash": "^4.14.178",
     "@types/node": "^17.0.15",
     "@types/react": "^17.0.39",
     "@types/styled-components": "^5.1.22",
