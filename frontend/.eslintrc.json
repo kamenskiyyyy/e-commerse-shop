@@ -14,7 +14,8 @@
     "plugin:prettier/recommended",
     "plugin:effector/recommended",
     "eslint:recommended",
-    "plugin:react/recommended"
+    "plugin:react/recommended",
+    "plugin:wesbos"
   ],
   "globals": {
     "Atomics": "readonly",
