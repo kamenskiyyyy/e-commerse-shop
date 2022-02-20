@@ -5,6 +5,7 @@ import { User } from './schemas/User';
 import { createAuth } from '@keystone-next/auth';
 import { Product } from './schemas/Product';
 import { ProductImage } from './schemas/ProductImage';
+import { insertSeedData } from './seed-data';
 
 const databaseURL = process.env.DATABASE_URL || 'mongodb://localhost:27017/sick-fits-keystone';
 
@@ -30,11 +31,16 @@ export default withAuth(config({
   db: {
     adapter: 'mongoose',
     url: databaseURL,
+    async onConnect(keystone) {
+      if (process.argv.includes('--seed-data')) {
+        await insertSeedData(keystone);
+      }
+    },
   },
   lists: createSchema({
     User,
     Product,
-    ProductImage
+    ProductImage,
   }),
   ui: {
     isAccessAllowed: ({ session }) => session?.data,
