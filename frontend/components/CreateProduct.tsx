@@ -4,6 +4,7 @@ import { ChangeEvent } from 'react';
 import gql from 'graphql-tag';
 import { useMutation } from '@apollo/client';
 import DisplayError from '@components/ErrorMessage';
+import { ALL_PRODUCTS_QUERY } from '@components/Products';
 
 const CREATE_PRODUCT_MUTATION = gql`
     mutation CREATE_PRODUCT_MUTATION(
@@ -34,7 +35,10 @@ export default function CreateProduct() {
     price: 100,
     description: 'Super choose',
   });
-  const [createProduct, { loading, error }] = useMutation(CREATE_PRODUCT_MUTATION, { variables: inputs });
+  const [createProduct, { loading, error }] = useMutation(CREATE_PRODUCT_MUTATION, {
+    variables: inputs,
+    refetchQueries: [{ query: ALL_PRODUCTS_QUERY }],
+  });
 
   async function handleSubmit(e: ChangeEvent<HTMLFormElement>) {
     e.preventDefault();
