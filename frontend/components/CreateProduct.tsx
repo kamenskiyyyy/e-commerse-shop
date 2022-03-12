@@ -1,23 +1,56 @@
 import useForm from '@lib/useForm';
 import Form from '@components/styles/Form';
 import { ChangeEvent } from 'react';
+import gql from 'graphql-tag';
+import { useMutation } from '@apollo/client';
+import DisplayError from '@components/ErrorMessage';
+
+const CREATE_PRODUCT_MUTATION = gql`
+    mutation CREATE_PRODUCT_MUTATION(
+        $name: String!
+        $description: String!
+        $price: Int!
+        $image: Upload
+    ) {
+        createProduct(data: {
+            name: $name
+            description: $description
+            price: $price
+            status: "AVAILABLE"
+            photo: {create: {image: $image, altText: $name}}
+        }) {
+            id
+            price
+            description
+            name
+        }
+    }
+`;
 
 export default function CreateProduct() {
-  const { inputs, handleChange } = useForm({
+  const { inputs, handleChange, clearForm } = useForm({
     image: '',
     name: 'Great',
     price: 100,
     description: 'Super choose',
   });
+  const [createProduct, { loading, error }] = useMutation(CREATE_PRODUCT_MUTATION, { variables: inputs });
 
-  function handleSubmit(e: ChangeEvent<HTMLFormElement>) {
+  async function handleSubmit(e: ChangeEvent<HTMLFormElement>) {
     e.preventDefault();
     console.log(inputs);
+    try {
+      await createProduct();
+      clearForm();
+    } catch (error) {
+      console.error('Error occurred');
+    }
   }
 
   return (
     <Form onSubmit={handleSubmit}>
-      <fieldset>
+      <DisplayError error={error} />
+      <fieldset disabled={loading} aria-busy={loading}>
         <label htmlFor='image'>
           Image
           <input required type='file' id='image' name='image' onChange={handleChange} />
