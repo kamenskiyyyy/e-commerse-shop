@@ -1,9 +1,9 @@
 import { ChangeEvent, useState } from 'react';
 
-export default function useForm(initial: { name?: string | number; price?: number; desctiption?: string; }) {
+export default function useForm(initial: { name?: string | number; price?: number; description?: string; image?: string }) {
   const [inputs, setInputs] = useState(initial || {});
 
-  function handleChange(e: ChangeEvent<HTMLInputElement>) {
+  function handleChange(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     let { value, name, type } = e.target;
     if (type === 'number') {
       // @ts-ignore
@@ -11,7 +11,7 @@ export default function useForm(initial: { name?: string | number; price?: numbe
     }
     if (type === 'file') {
       // @ts-ignore
-      value[0] = e.target.files;
+      [value] = e.target.files;
     }
     setInputs({
       ...inputs, [name]: value,
