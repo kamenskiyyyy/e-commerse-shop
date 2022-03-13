@@ -3,6 +3,7 @@ import Title from '@components/styles/Title';
 import Link from 'next/link';
 import PriceTag from '@components/styles/PriceTag';
 import formatMoney from '@lib/formatMoney';
+import { DeleteProduct } from '@components/DeleteProduct';
 
 export default function Product({ product }: any) {
   return <ItemStyles>
@@ -12,6 +13,7 @@ export default function Product({ product }: any) {
     <p>{product.description}</p>
     <div className='buttonList'>
       <Link href={`update?id=${product.id}`}>Edit ✏️</Link>
+      <DeleteProduct id={product.id}>Delete</DeleteProduct>
     </div>
   </ItemStyles>;
 }
