@@ -10,5 +10,8 @@ export default function Product({ product }: any) {
     <Title><Link href={`/product/${product.id}`}>{product.name}</Link></Title>
     <PriceTag>{formatMoney(product.price)}</PriceTag>
     <p>{product.description}</p>
+    <div className='buttonList'>
+      <Link href={`update?id=${product.id}`}>Edit ✏️</Link>
+    </div>
   </ItemStyles>;
 }

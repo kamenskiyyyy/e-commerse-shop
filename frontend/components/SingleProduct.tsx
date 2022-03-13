@@ -36,7 +36,6 @@ export default function SingleProduct({ id }: { id: string | string[] | undefine
   const { loading, error, data } = useQuery(SINGLE_ITEM_QUERY, { variables: { id } });
   const { name, description, photo } = data?.Product || {};
 
-
   if (loading) return <p>Loading...</p>;
   if (error) return <DisplayError error={error} />;
 
