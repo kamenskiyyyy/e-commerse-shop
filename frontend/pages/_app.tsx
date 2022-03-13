@@ -7,6 +7,11 @@ import { useApollo } from '@lib/withData';
 export default function MyApp({ Component, pageProps }: AppProps) {
   const apolloClient = useApollo(pageProps);
 
+  if (Component.getInitialProps) {
+    pageProps =  Component.getInitialProps(pageProps);
+  }
+
+
   return <ApolloProvider client={apolloClient}>
     <NextNProgress color='red'
                    startPosition={0.3}

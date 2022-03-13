@@ -46,7 +46,7 @@ export default function CreateProduct() {
     try {
       const res = await createProduct();
       clearForm();
-      Router.push(`/products/${res.data.createProduct.id}` );
+      Router.push(`/product/${res.data.createProduct.id}` );
     } catch (error) {
       console.error('Error occurred');
     }
