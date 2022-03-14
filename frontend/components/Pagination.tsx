@@ -5,7 +5,7 @@ import { gql, useQuery } from '@apollo/client';
 import DisplayError from '@components/ErrorMessage';
 import { perPage } from '../config';
 
-const PAGINATION_QUERY = gql`
+export const PAGINATION_QUERY = gql`
     query {
         _allProductsMeta {
             count
@@ -13,7 +13,7 @@ const PAGINATION_QUERY = gql`
     }
 `;
 
-export const Pagination = ({ page }) => {
+export const Pagination = ({ page }: { page: number }) => {
   const { loading, error, data } = useQuery(PAGINATION_QUERY);
   const meta = data?._allProductsMeta;
 

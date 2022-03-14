@@ -7,6 +7,7 @@ import fetch from 'isomorphic-unfetch';
 import isEqual from 'lodash/isEqual';
 import type { AppProps } from 'next/app';
 import { useMemo } from 'react';
+import paginationField from '@lib/paginationField';
 
 const APOLLO_STATE_PROP_NAME = '__APOLLO_STATE__';
 
@@ -58,7 +59,7 @@ const createApolloClient = (headers: IncomingHttpHeaders | null = null) => {
         Query: {
           fields: {
             // TODO: We will add this together!
-            // allProducts: paginationField(),
+            allProducts: paginationField(),
           },
         },
       },
