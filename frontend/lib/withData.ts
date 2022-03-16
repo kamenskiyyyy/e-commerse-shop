@@ -58,7 +58,7 @@ const createApolloClient = (headers: IncomingHttpHeaders | null = null) => {
       typePolicies: {
         Query: {
           fields: {
-            // TODO: We will add this together!
+            // @ts-ignore
             allProducts: paginationField(),
           },
         },
