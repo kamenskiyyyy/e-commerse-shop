@@ -2,36 +2,27 @@ import Form from '@components/styles/Form';
 import useForm from '@lib/useForm';
 import { ChangeEvent } from 'react';
 import { gql, useMutation } from '@apollo/client';
-import { CURRENT_USER_QUERY } from '@components/User';
 import DisplayError from '@components/ErrorMessage';
 import Router from 'next/router';
 
-const SIGIN_MUTATION = gql`
-    mutation ($email: String!, $password: String!) {
-        authenticateUserWithPassword (email: $email, password: $password) {
-            ... on UserAuthenticationWithPasswordSuccess {
-                item {
-                    id email name
-                }
-            }
-            ...on UserAuthenticationWithPasswordFailure {
-                message code
-            }
+const SIGN_UP_MUTATION = gql`
+    mutation ($email: String!, $name: String!, $password: String!) {
+        createUser(data: {name: $name, email: $email, password: $password}) {
+            id email name
         }
     }
 `;
 
-export const SignIn = () => {
-  const { inputs, handleChange, resetForm } = useForm({ email: '', password: '' });
-  const [signin, { data, loading }] = useMutation(SIGIN_MUTATION, {
+export const SignUp = () => {
+  const { inputs, handleChange, resetForm } = useForm({ email: '', password: '', name: '' });
+  const [signUp, { data, error, loading }] = useMutation(SIGN_UP_MUTATION, {
     variables: inputs,
-    refetchQueries: [{ query: CURRENT_USER_QUERY }],
   });
 
   async function handleSubmit(e: ChangeEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
-      await signin();
+      await signUp();
       resetForm();
       Router.push('/');
     } catch (e) {
@@ -41,9 +32,14 @@ export const SignIn = () => {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <h2>Sign into account</h2>
-      <DisplayError error={data?.authenticateUserWithPassword} />
+      <h2>Sign Up For an Account</h2>
+      <DisplayError error={error} />
       <fieldset aria-busy={loading}>
+        {data?.createUser && <p>Signed up with {data.createUser.email} - Please Go head and Sign In!</p>}
+        <label htmlFor='name'>Name
+          <input type='text' name={'name'} placeholder={'Ivan'} autoComplete={'name'} required
+                 value={inputs.name} onChange={handleChange} />
+        </label>
         <label htmlFor='email'>Email
           <input type='email' name={'email'} placeholder={'your@example.com'} autoComplete={'email'} required
                  value={inputs.email} onChange={handleChange} />
