@@ -4,6 +4,7 @@ import { ChangeEvent } from 'react';
 import { gql, useMutation } from '@apollo/client';
 import { CURRENT_USER_QUERY } from '@components/User';
 import DisplayError from '@components/ErrorMessage';
+import Router from 'next/router';
 
 const SIGIN_MUTATION = gql`
     mutation ($email: String!, $password: String!) {
@@ -34,6 +35,7 @@ export const SignIn = () => {
     try {
       await signin();
       resetForm();
+      Router.push('/');
     } catch (e) {
       console.log('Произошла ошибка');
     }
