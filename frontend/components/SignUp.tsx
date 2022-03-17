@@ -24,7 +24,6 @@ export const SignUp = () => {
     try {
       await signUp();
       resetForm();
-      Router.push('/');
     } catch (e) {
       console.log('Произошла ошибка');
     }

@@ -23,7 +23,7 @@ const SIGIN_MUTATION = gql`
 
 export const SignIn = () => {
   const { inputs, handleChange, resetForm } = useForm({ email: '', password: '' });
-  const [signin, { data, loading }] = useMutation(SIGIN_MUTATION, {
+  const [signIn, { data, loading }] = useMutation(SIGIN_MUTATION, {
     variables: inputs,
     refetchQueries: [{ query: CURRENT_USER_QUERY }],
   });
@@ -31,7 +31,7 @@ export const SignIn = () => {
   async function handleSubmit(e: ChangeEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
-      await signin();
+      await signIn();
       resetForm();
       Router.push('/');
     } catch (e) {
