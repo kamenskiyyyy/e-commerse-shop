@@ -1,6 +1,7 @@
 import { SignIn } from '@components/SignIn';
 import { SignUp } from '@components/SignUp';
 import styled from 'styled-components';
+import { RequestReset } from '@components/RequestReset';
 
 const GridWrapper = styled.div`
   display: grid;
@@ -10,6 +11,10 @@ const GridWrapper = styled.div`
 
 export default function SigninPage() {
   return (
-    <GridWrapper><SignIn /><SignUp /></GridWrapper>
+    <GridWrapper>
+      <SignIn />
+      <SignUp />
+      <RequestReset />
+    </GridWrapper>
   );
 }

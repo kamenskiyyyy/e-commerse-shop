@@ -1,6 +1,6 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 
-export default function useForm(initial: { name?: string | number; price?: number; description?: string; image?: string; email?: string; password?: string }) {
+export default function useForm(initial: { name?: string | number; price?: number; description?: string; image?: string; email?: string; password?: string; token?: string }) {
   const [inputs, setInputs] = useState(initial || {});
   const initialValues = Object.values(initial).join('')
   useEffect(() => setInputs(initial), [initialValues]);

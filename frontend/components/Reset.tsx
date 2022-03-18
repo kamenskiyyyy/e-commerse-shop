@@ -3,25 +3,27 @@ import useForm from '@lib/useForm';
 import { ChangeEvent } from 'react';
 import { gql, useMutation } from '@apollo/client';
 import DisplayError from '@components/ErrorMessage';
+import { useRouter } from 'next/router';
 
-const SIGN_UP_MUTATION = gql`
-    mutation ($email: String!, $name: String!, $password: String!) {
-        createUser(data: {name: $name, email: $email, password: $password}) {
-            id email name
+const RESET_MUTATION = gql`
+    mutation ($email: String!, $password: String!, $token:String!) {
+        redeemUserPasswordResetToken (email: $email password: $password token: $token) {
+            message code
         }
     }
 `;
 
-export const SignUp = () => {
-  const { inputs, handleChange, resetForm } = useForm({ email: '', password: '', name: '' });
-  const [signUp, { data, error, loading }] = useMutation(SIGN_UP_MUTATION, {
+export const Reset = () => {
+  const query = useRouter().query;
+  const { inputs, handleChange, resetForm } = useForm({ email: '', password: '', token: query?.token as string });
+  const [resetPassword, { data, error, loading }] = useMutation(RESET_MUTATION, {
     variables: inputs,
   });
 
   async function handleSubmit(e: ChangeEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
-      await signUp();
+      await resetPassword();
       resetForm();
     } catch (e) {
       console.log('Произошла ошибка');
@@ -30,14 +32,10 @@ export const SignUp = () => {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <h2>Sign Up For an Account</h2>
+      <h2>Reset your password</h2>
       <DisplayError error={error} />
       <fieldset aria-busy={loading}>
-        {data?.createUser && <p>Signed up with {data.createUser.email} - Please Go head and Sign In!</p>}
-        <label htmlFor='name'>Name
-          <input type='text' name={'name'} placeholder={'Ivan'} autoComplete={'name'} required
-                 value={inputs.name} onChange={handleChange} />
-        </label>
+        {data?.redeemUserPasswordResetToken === null && <p>Success! You can now sign in! </p>}
         <label htmlFor='email'>Email
           <input type='email' name={'email'} placeholder={'your@example.com'} autoComplete={'email'} required
                  value={inputs.email} onChange={handleChange} />
@@ -46,7 +44,7 @@ export const SignUp = () => {
           <input type='password' name={'password'} placeholder={'password'} autoComplete={'password'} required
                  value={inputs.password} onChange={handleChange} />
         </label>
-        <button type={'submit'}>Sign in</button>
+        <button type={'submit'}>Reset password</button>
       </fieldset>
     </Form>
   );
