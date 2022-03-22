@@ -6,6 +6,7 @@ import { createAuth } from '@keystone-next/auth';
 import { Product } from './schemas/Product';
 import { ProductImage } from './schemas/ProductImage';
 import { insertSeedData } from './seed-data';
+import { sendPasswordResetEmail } from './lib/mail';
 
 const databaseURL = process.env.DATABASE_URL || 'mongodb://localhost:27017/sick-fits-keystone';
 
@@ -20,8 +21,8 @@ const { withAuth } = createAuth({
   secretField: 'password',
   initFirstItem: { fields: ['name', 'email', 'password'] },
   passwordResetLink: {
-    async sendToken(args) {
-      console.log(args);
+    async sendToken({ token, identity }) {
+      await sendPasswordResetEmail(token, identity);
     },
   },
 });
