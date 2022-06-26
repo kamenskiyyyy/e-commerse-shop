@@ -7,8 +7,9 @@ import { Product } from './schemas/Product';
 import { ProductImage } from './schemas/ProductImage';
 import { insertSeedData } from './seed-data';
 import { sendPasswordResetEmail } from './lib/mail';
+import { CartItem } from './schemas/CartItem';
 
-const databaseURL = process.env.DATABASE_URL || 'mongodb://localhost:27017/sick-fits-keystone';
+const databaseURL = 'mongodb://localhost:27017/sick-fits-keystone';
 
 const sessionConfig = {
   maxAge: 60 * 60 * 24 * 360,
@@ -47,6 +48,7 @@ export default withAuth(config({
     User,
     Product,
     ProductImage,
+    CartItem
   }),
   ui: {
     isAccessAllowed: ({ session }) => session?.data,
