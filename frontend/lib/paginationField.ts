@@ -9,9 +9,9 @@ export default function paginationField() {
       const count = data?._allProductsMeta?.count;
       const page = skip / first + 1;
       const pages = Math.ceil(count / first);
-      const items = existing.slice(skip, skip + first).filter(x => x);
+      const items = existing.slice(skip, skip + first).filter((x) => x);
       if (items.length && items.length !== first && page === pages) {
-        return items
+        return items;
       }
       if (items.length !== first) {
         return false;

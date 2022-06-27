@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const CartStyles = styled.div`
+const CartStyles = styled.div<{ open?: boolean }>`
   padding: 20px;
   background: white;
   position: fixed;
@@ -16,12 +16,14 @@ const CartStyles = styled.div`
   z-index: 5;
   display: grid;
   grid-template-rows: auto 1fr auto;
-  ${(props) => props.open && `transform: translateX(0);`};
+  ${({ open }) => open && `transform: translateX(0);`};
+
   header {
     border-bottom: 5px solid var(--black);
     margin-bottom: 2rem;
     padding-bottom: 2rem;
   }
+
   footer {
     border-top: 10px double var(--black);
     margin-top: 2rem;

@@ -1,4 +1,4 @@
-import styled, {keyframes} from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 
 const DropDown = styled.div`
   position: absolute;
@@ -15,7 +15,8 @@ const DropDownItem = styled.div`
   ${(props) => (props.highlighted ? 'padding-left: 2rem;' : null)};
   display: flex;
   align-items: center;
-  border-left: 10px solid ${(props) => (props.highlighted ? props.theme.lightgrey : 'white')};
+  border-left: 10px solid
+    ${(props) => (props.highlighted ? props.theme.lightgrey : 'white')};
 
   img {
     margin-right: 10px;
@@ -47,4 +48,4 @@ const SearchStyles = styled.div`
   }
 `;
 
-export {DropDown, DropDownItem, SearchStyles};
+export { DropDown, DropDownItem, SearchStyles };

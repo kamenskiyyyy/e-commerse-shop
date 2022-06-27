@@ -7,22 +7,28 @@ import DisplayError from '@components/ErrorMessage';
 import Router from 'next/router';
 
 const SIGIN_MUTATION = gql`
-    mutation ($email: String!, $password: String!) {
-        authenticateUserWithPassword (email: $email, password: $password) {
-            ... on UserAuthenticationWithPasswordSuccess {
-                item {
-                    id email name
-                }
-            }
-            ...on UserAuthenticationWithPasswordFailure {
-                message code
-            }
+  mutation ($email: String!, $password: String!) {
+    authenticateUserWithPassword(email: $email, password: $password) {
+      ... on UserAuthenticationWithPasswordSuccess {
+        item {
+          id
+          email
+          name
         }
+      }
+      ... on UserAuthenticationWithPasswordFailure {
+        message
+        code
+      }
     }
+  }
 `;
 
 export const SignIn = () => {
-  const { inputs, handleChange, resetForm } = useForm({ email: '', password: '' });
+  const { inputs, handleChange, resetForm } = useForm({
+    email: '',
+    password: '',
+  });
   const [signIn, { data, loading }] = useMutation(SIGIN_MUTATION, {
     variables: inputs,
     refetchQueries: [{ query: CURRENT_USER_QUERY }],
@@ -44,15 +50,31 @@ export const SignIn = () => {
       <h2>Sign into account</h2>
       <DisplayError error={data?.authenticateUserWithPassword} />
       <fieldset aria-busy={loading}>
-        <label htmlFor='email'>Email
-          <input type='email' name={'email'} placeholder={'your@example.com'} autoComplete={'email'} required
-                 value={inputs.email} onChange={handleChange} />
+        <label htmlFor='email'>
+          Email
+          <input
+            type='email'
+            name='email'
+            placeholder='your@example.com'
+            autoComplete='email'
+            required
+            value={inputs.email}
+            onChange={handleChange}
+          />
         </label>
-        <label htmlFor='password'>Passsword
-          <input type='password' name={'password'} placeholder={'password'} autoComplete={'password'} required
-                 value={inputs.password} onChange={handleChange} />
+        <label htmlFor='password'>
+          Passsword
+          <input
+            type='password'
+            name='password'
+            placeholder='password'
+            autoComplete='password'
+            required
+            value={inputs.password}
+            onChange={handleChange}
+          />
         </label>
-        <button type={'submit'}>Sign in</button>
+        <button type='submit'>Sign in</button>
       </fieldset>
     </Form>
   );

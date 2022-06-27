@@ -3,15 +3,18 @@ import { NextPage } from 'next';
 import { MutationUpdaterFunction } from '@apollo/client/core/types';
 
 const DELETE_PRODUCT_MUTATION = gql`
-    mutation ($id: ID!) {
-        deleteProduct(id: $id) {
-            id
-            name
-        }
+  mutation ($id: ID!) {
+    deleteProduct(id: $id) {
+      id
+      name
     }
+  }
 `;
 
-const update: MutationUpdaterFunction<any, any, any, any> = (cache, payload) => {
+const update: MutationUpdaterFunction<any, any, any, any> = (
+  cache,
+  payload
+) => {
   cache.evict(cache.identify(payload.data.deleteProduct));
 };
 
@@ -25,6 +28,8 @@ export const DeleteProduct: NextPage<{ id: string }> = ({ id, children }) => {
   };
 
   return (
-    <button type={'button'} disabled={loading} onClick={handleDelete}>{children}</button>
+    <button type='button' disabled={loading} onClick={handleDelete}>
+      {children}
+    </button>
   );
 };

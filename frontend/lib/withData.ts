@@ -1,4 +1,9 @@
-import { ApolloClient, ApolloLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client';
+import {
+  ApolloClient,
+  ApolloLink,
+  InMemoryCache,
+  NormalizedCacheObject,
+} from '@apollo/client';
 import { onError } from '@apollo/link-error';
 import { createUploadLink } from 'apollo-upload-client';
 import merge from 'deepmerge';
@@ -15,8 +20,8 @@ let apolloClient: ApolloClient<NormalizedCacheObject> | undefined;
 
 const createApolloClient = (headers: IncomingHttpHeaders | null = null) => {
   // isomorphic fetch for passing the cookies along with each GraphQL request
-  const enhancedFetch = (url: RequestInfo, init: RequestInit) => {
-    return fetch(url, {
+  const enhancedFetch = (url: RequestInfo, init: RequestInit) =>
+    fetch(url, {
       ...init,
       headers: {
         ...init.headers,
@@ -25,7 +30,6 @@ const createApolloClient = (headers: IncomingHttpHeaders | null = null) => {
         Cookie: headers?.cookie ?? '',
       },
     }).then((response) => response);
-  };
 
   return new ApolloClient({
     // SSR only for Node.js
@@ -35,12 +39,12 @@ const createApolloClient = (headers: IncomingHttpHeaders | null = null) => {
         if (graphQLErrors)
           graphQLErrors.forEach(({ message, locations, path }) =>
             console.log(
-              `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
-            ),
+              `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+            )
           );
         if (networkError)
           console.log(
-            `[Network error]: ${networkError}. Backend is unreachable. Is it running?`,
+            `[Network error]: ${networkError}. Backend is unreachable. Is it running?`
           );
       }),
       // this uses apollo-link-http under the hood, so all the options here come from that package
@@ -67,7 +71,7 @@ const createApolloClient = (headers: IncomingHttpHeaders | null = null) => {
   });
 };
 
-type InitialState = NormalizedCacheObject | undefined
+type InitialState = NormalizedCacheObject | undefined;
 
 interface IInitializeApollo {
   headers?: IncomingHttpHeaders | null;
@@ -78,7 +82,7 @@ export const initializeApollo = (
   { headers, initialState }: IInitializeApollo = {
     headers: null,
     initialState: null,
-  },
+  }
 ) => {
   const _apolloClient = apolloClient ?? createApolloClient(headers);
 
@@ -94,7 +98,7 @@ export const initializeApollo = (
       arrayMerge: (destinationArray, sourceArray) => [
         ...sourceArray,
         ...destinationArray.filter((d) =>
-          sourceArray.every((s) => !isEqual(d, s)),
+          sourceArray.every((s) => !isEqual(d, s))
         ),
       ],
     });
@@ -113,7 +117,7 @@ export const initializeApollo = (
 
 export const addApolloState = (
   client: ApolloClient<NormalizedCacheObject>,
-  pageProps: AppProps['pageProps'],
+  pageProps: AppProps['pageProps']
 ) => {
   if (pageProps?.props) {
     pageProps.props[APOLLO_STATE_PROP_NAME] = client.cache.extract();
@@ -124,7 +128,5 @@ export const addApolloState = (
 
 export function useApollo(pageProps: AppProps['pageProps']) {
   const state = pageProps[APOLLO_STATE_PROP_NAME];
-  return useMemo(() => initializeApollo({ initialState: state }), [
-    state,
-  ]);
+  return useMemo(() => initializeApollo({ initialState: state }), [state]);
 }

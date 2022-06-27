@@ -5,20 +5,20 @@ import Product from '@components/Product';
 import { perPage } from '../config';
 
 export const ALL_PRODUCTS_QUERY = gql`
-    query ($skip: Int = 0, $first: Int) {
-        allProducts(first: $first, skip: $skip) {
-            id
-            name
-            price
-            description
-            photo {
-                id
-                image {
-                    publicUrlTransformed
-                }
-            }
+  query ($skip: Int = 0, $first: Int) {
+    allProducts(first: $first, skip: $skip) {
+      id
+      name
+      price
+      description
+      photo {
+        id
+        image {
+          publicUrlTransformed
         }
+      }
     }
+  }
 `;
 
 const ProductsListStyles = styled.div`
@@ -41,7 +41,9 @@ export default function Products({ page }: { page: number }) {
   return (
     <div>
       <ProductsListStyles>
-        {data.allProducts.map((product: any) => <Product key={product.id} product={product} />)}
+        {data.allProducts.map((product: any) => (
+          <Product key={product.id} product={product} />
+        ))}
       </ProductsListStyles>
     </div>
   );

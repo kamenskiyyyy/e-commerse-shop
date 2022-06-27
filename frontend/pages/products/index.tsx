@@ -3,8 +3,8 @@ import { Pagination } from '@components/Pagination';
 import { useRouter } from 'next/router';
 
 export default function ProductsPage() {
-  const query = useRouter().query
-  const page = parseInt(query?.page as string || "1")
+  const { query } = useRouter();
+  const page = parseInt((query?.page as string) || '1');
 
   return (
     <div>
@@ -14,4 +14,3 @@ export default function ProductsPage() {
     </div>
   );
 }
-

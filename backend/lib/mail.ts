@@ -27,7 +27,10 @@ function makeANiceEmail(text: string): string {
   `;
 }
 
-export async function sendPasswordResetEmail(resetToken: string, to: string): Promise<void> {
+export async function sendPasswordResetEmail(
+  resetToken: string,
+  to: string
+): Promise<void> {
   const info = await transport.sendMail({
     to,
     from: `"Notification from shop Sick Fits" <${process.env.MAIL_USER}>`,
