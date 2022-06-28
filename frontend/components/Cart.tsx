@@ -3,6 +3,8 @@ import { useUser } from '@components/User';
 import styled from 'styled-components';
 import formatMoney from '@lib/formatMoney';
 import calcTotalPrice from '@lib/calcTotalPrice';
+import { useCart } from '@lib/cartState';
+import CloseButton from '@components/styles/CloseButton';
 import Supreme from './styles/Supreme';
 
 const CartItemStyles = styled.li`
@@ -48,14 +50,16 @@ function CartItem({ cartItem }) {
 
 export default function Cart() {
   const me = useUser();
+  const { cartOpen, closeCart } = useCart();
 
   if (!me) return null;
 
   return (
-    <CartStyles open>
+    <CartStyles open={cartOpen}>
       <header>
         <Supreme>{me.name}'s Cart</Supreme>
       </header>
+      <CloseButton onClick={closeCart}>&times;</CloseButton>
       <ul>
         {me.cart.map((cartItem) => (
           <CartItem key={cartItem.id} cartItem={cartItem} />
