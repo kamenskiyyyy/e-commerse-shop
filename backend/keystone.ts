@@ -11,6 +11,7 @@ import { ProductImage } from './schemas/ProductImage';
 import { insertSeedData } from './seed-data';
 import { sendPasswordResetEmail } from './lib/mail';
 import { CartItem } from './schemas/CartItem';
+import { extendGraphqlSchema } from './mutations';
 
 const databaseURL = 'mongodb://localhost:27017/sick-fits-keystone';
 
@@ -49,6 +50,7 @@ export default withAuth(
         }
       },
     },
+    extendGraphqlSchema,
     lists: createSchema({
       User,
       Product,
