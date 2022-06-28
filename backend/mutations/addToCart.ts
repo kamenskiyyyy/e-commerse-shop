@@ -10,13 +10,10 @@ async function addToCart(
 ): Promise<CartItemCreateInput> {
   const sesh = context.session as Session;
   if (!sesh.itemId) {
-    throw new Error('You must be logged in to this');
+    throw new Error('You must be logged in to do this');
   }
   const allCartItems = await context.lists.CartItem.findMany({
-    where: {
-      user: { id: sesh.itemId },
-      product: { id: productId },
-    },
+    where: { user: { id: sesh.itemId }, product: { id: productId } },
     resolveFields: 'id, quantity',
   });
 
@@ -28,15 +25,16 @@ async function addToCart(
     return await context.lists.CartItem.updateOne({
       id: existingCartItem.id,
       data: { quantity: existingCartItem.quantity + 1 },
+      resolveFields: false,
     });
   }
-
   return await context.lists.CartItem.createOne({
     data: {
       product: { connect: { id: productId } },
       user: { connect: { id: sesh.itemId } },
     },
-  });
+    resolveFields: false,
+  })
 }
 
 export default addToCart;
