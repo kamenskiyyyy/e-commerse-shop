@@ -2,12 +2,11 @@
 import { KeystoneContext } from '@keystone-next/types';
 import { CartItemCreateInput, OrderCreateInput } from '../.keystone/schema-types';
 import { graphql } from './index';
-import scriptConfig from '@lib/stripe';
+import scriptConfig from '../lib/stripe';
 
 interface Arguments {
   token: string;
 }
-
 
 async function checkout(
   root: any,
@@ -49,10 +48,34 @@ async function checkout(
     amount,
     currency: 'USD',
     confirm: true,
-    payment_method: token
+    payment_method: token,
   }).catch((error) => {
-    throw new Error(error.message)
-  }).then()
+    throw new Error(error.message);
+  });
+
+  const orderItems = cartItems.map((cartItem) => {
+    return {
+      name: cartItem.product.name,
+      description: cartItem.product.description,
+      price: cartItem.product.price,
+      quantity: cartItem.product.quantity,
+      photo: {
+        connect: { id: cartItem.product.photo.id },
+      },
+    };
+  });
+  const order = await context.lists.Order.createOne({
+    data: {
+      total: charge.amount,
+      charge: charge.id,
+      items: { create: orderItems },
+      user: { connect: { id: userId } },
+    },
+  });
+
+  const cartItemIds = cartItems.map((cartItem) => cartItem.id);
+  await context.lists.CartItem.deleteMany({ ids: cartItemIds });
+  return order;
 }
 
 export default checkout;
