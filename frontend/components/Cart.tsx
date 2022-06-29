@@ -6,7 +6,7 @@ import calcTotalPrice from '@lib/calcTotalPrice';
 import { useCart } from '@lib/cartState';
 import CloseButton from '@components/styles/CloseButton';
 import RemoveFromCart from '@components/RemoveFromCart';
-import { Checkout } from '@components/CheckoutForm';
+import { Checkout } from '@components/Checkout';
 import Supreme from './styles/Supreme';
 
 const CartItemStyles = styled.li`
