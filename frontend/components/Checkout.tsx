@@ -11,6 +11,9 @@ import { FormEventHandler, useState } from 'react';
 import { StripeError } from '@stripe/stripe-js/types/stripe-js/stripe';
 import gql from 'graphql-tag';
 import { useMutation } from '@apollo/client';
+import { useRouter } from 'next/router';
+import { useCart } from '@lib/cartState';
+import { CURRENT_USER_QUERY } from '@components/User';
 
 const CheckoutFormStyles = styled.form`
   box-shadow: 0 1px 2px 2px rgba(0, 0, 0, 0.04);
@@ -42,8 +45,11 @@ function CheckoutForm() {
   const [Loading, setLoading] = useState(false);
   const stripe = useStripe();
   const elements = useElements();
+  const router = useRouter();
+  const { closeCart } = useCart();
   const [checkout, { error: graphQLError }] = useMutation(
-    CREATE_ORDER_MUTATION
+    CREATE_ORDER_MUTATION,
+    { refetchQueries: [{ query: CURRENT_USER_QUERY }] }
   );
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
@@ -54,21 +60,27 @@ function CheckoutForm() {
       card: elements.getElement(CardElement),
     });
     if (error) {
+      setLoading(false);
       return setError(error);
     }
     const order = await checkout({ variables: { token: paymentMethod?.id } });
+    closeCart();
+    await router.push({
+      pathname: '/order/[id]',
+      query: { id: order.data.checkout.id },
+    });
 
     setLoading(false);
   };
 
   return (
-    <CheckoutFormStyles onSubmit={handleSubmit}>
+    <CheckoutFormStyles aria-disabled={Loading} onSubmit={handleSubmit}>
       {error && <p style={{ fontSize: 12, color: 'red' }}>{error.message}</p>}
       {graphQLError && (
         <p style={{ fontSize: 12, color: 'red' }}>{error?.message}</p>
       )}
       <CardElement />
-      <SickButton>Check out now</SickButton>
+      <SickButton disabled={Loading}>Check out now</SickButton>
     </CheckoutFormStyles>
   );
 }
